@@ -3,20 +3,25 @@ using UnityEngine;
 
 public class MapParser : MonoBehaviour
 {
-    public TextAsset json;
+    [SerializeField] private TextAsset mapConfigJson;
+
     private void Start()
     {
-        ParseAndSpawn(json.text);
+        GenerateMap(ParseMap(mapConfigJson.text));
     }
 
-    public void ParseAndSpawn(string json)
+    public Map ParseMap(string json)
     {
-        var infos = JsonUtility.FromJson<Infos>(json);
+        return JsonUtility.FromJson<Map>(json);
+    }
 
-        foreach (var item in infos.List)
+    private void GenerateMap(Map map)
+    {
+        foreach (var item in map.List)
         {
             GameObject gameObject = new GameObject();
             gameObject.transform.position = new Vector2(item.X, item.Y);
+            // gameObject.transform.localScale = new Vector2(item.Width, item.Height);
             gameObject.AddComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>($"Sprites/Game/{item.Id}");
         }
     }

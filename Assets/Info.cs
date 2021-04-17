@@ -1,18 +1,19 @@
 using System;
 
 [Serializable]
-public struct Infos
+public struct Map
 {
-    public Info[] List;
+    public Chunk[] List;
+
+    [Serializable]
+    public struct Chunk
+    {
+        public string Id;
+        public string Type;
+        public float Width;
+        public float Height;
+        public float X;
+        public float Y;
+    }
 }
 
-[Serializable]
-public struct Info
-{
-    public string Id;
-    public string Type;
-    public float Width;
-    public float Height;
-    public float X;
-    public float Y;
-}
