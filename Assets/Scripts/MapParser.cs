@@ -1,11 +1,13 @@
-﻿
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MapParser : MonoBehaviour
 {
+    [SerializeField] Text text;
+
     [SerializeField] private TextAsset mapConfigJson;
-    private Dictionary<Vector2, string> tiles = new Dictionary<Vector2, string>();
+    private Dictionary<Vector2Int, string> tiles = new Dictionary<Vector2Int, string>();
 
     private void Start()
     {
@@ -16,11 +18,10 @@ public class MapParser : MonoBehaviour
     {
         var pos = Camera.main.ViewportToWorldPoint(new Vector3(0, 1, 0));
 
-        var val = Mathf.RoundToInt(pos.x / 5.12f) * 5.12f;
-        var val2 = Mathf.RoundToInt(pos.y / 5.12f) * 5.12f;
-        Vector2 v = new Vector2(val, val2);
+        int nearestX = Mathf.RoundToInt(Mathf.RoundToInt(pos.x / 5.12f) * 5.12f);
+        int nearestY = Mathf.RoundToInt(Mathf.RoundToInt(pos.y / 5.12f) * 5.12f);
 
-        Debug.Log(tiles[v]);
+        text.text = tiles[new Vector2Int(nearestX, nearestY)];
     }
 
     public Map ParseMap(string json)
@@ -37,7 +38,7 @@ public class MapParser : MonoBehaviour
             // gameObject.transform.localScale = new Vector2(item.Width, item.Height);
             var sprite = Resources.Load<Sprite>($"Sprites/Game/{item.Id}");
             gameObject.AddComponent<SpriteRenderer>().sprite = sprite;
-            tiles.Add(gameObject.transform.position, sprite.name);
+            tiles.Add(Vector2Int.RoundToInt(gameObject.transform.position), sprite.name);
         }
     }
 }
