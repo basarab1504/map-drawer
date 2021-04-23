@@ -43,6 +43,6 @@ public class CameraMovement : MonoBehaviour
 
         Vector3 viewportPoint = camera.ScreenToViewportPoint(Input.mousePosition - pressedDownPoint);
         Vector3 targetPosition = new Vector3(viewportPoint.x * dragSpeed, viewportPoint.y * dragSpeed, 0);
-        transform.Translate(targetPosition, Space.World);
+        transform.position += targetPosition * Time.deltaTime;
     }
 }
