@@ -8,7 +8,6 @@ class SimpleMenu : MonoBehaviour, IMenu
     public UnityEvent ViewOpened;
     public UnityEvent ViewClosed;
 
-
     public string Name => name;
 
     void Awake()

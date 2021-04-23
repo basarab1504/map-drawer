@@ -1,15 +1,17 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class MapParser : MonoBehaviour
 {
-    [SerializeField] private TextAsset mapConfigJson;
+    [SerializeField] private TextAsset mapConfig;
     private Dictionary<Vector2Int, string> tiles = new Dictionary<Vector2Int, string>();
 
-    private void Start()
+    public Vector2 min;
+    public Vector2 max;
+
+    private void Awake()
     {
-        GenerateMap(ParseMap(mapConfigJson.text));
+        GenerateMap(ParseMap(mapConfig.text));
     }
 
     public string FindTileName()
@@ -29,8 +31,21 @@ public class MapParser : MonoBehaviour
 
     private void GenerateMap(MapInfo map)
     {
+        min = new Vector2(map.List[0].X, map.List[0].Y);
+        max = new Vector2(map.List[0].X, map.List[0].Y);
+
+        var par = new GameObject();
+
         foreach (var item in map.List)
         {
+            if (min.x > item.X)
+                min.x = item.X;
+            if (min.y > item.Y)
+                min.y = item.Y;
+            if (max.x < item.X)
+                max.x = item.X;
+            if (max.y < item.Y)
+                max.y = item.Y;
             GameObject gameObject = new GameObject();
             gameObject.transform.position = new Vector2(item.X, item.Y);
             // gameObject.transform.localScale = new Vector2(item.Width, item.Height);
@@ -40,5 +55,12 @@ public class MapParser : MonoBehaviour
             renderer.size = new Vector2(item.Width, item.Height);
             tiles.Add(Vector2Int.RoundToInt(gameObject.transform.position), sprite.name);
         }
+
+        min -= new Vector2(map.List[0].Width / 2, map.List[0].Height / 2);
+        max += new Vector2(map.List[0].Width / 2, map.List[0].Height / 2);
+
+        par.transform.localScale = max - min;
+
+        par.AddComponent<BoxCollider2D>();
     }
 }
