@@ -6,8 +6,6 @@ public class MapParser : MonoBehaviour
 {
     [SerializeField] Text text;
 
-    public Vector2 Bounds { get; set; }
-
     [SerializeField] private TextAsset mapConfigJson;
     private Dictionary<Vector2Int, string> tiles = new Dictionary<Vector2Int, string>();
 
