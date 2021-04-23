@@ -4,8 +4,6 @@ using UnityEngine.UI;
 
 public class MapParser : MonoBehaviour
 {
-    [SerializeField] Text text;
-
     [SerializeField] private TextAsset mapConfigJson;
     private Dictionary<Vector2Int, string> tiles = new Dictionary<Vector2Int, string>();
 
@@ -14,14 +12,14 @@ public class MapParser : MonoBehaviour
         GenerateMap(ParseMap(mapConfigJson.text));
     }
 
-    public void Find()
+    public string FindTileName()
     {
         var pos = Camera.main.ViewportToWorldPoint(new Vector3(0, 1, 0));
 
         int nearestX = Mathf.RoundToInt(Mathf.RoundToInt(pos.x / 5.12f) * 5.12f);
         int nearestY = Mathf.RoundToInt(Mathf.RoundToInt(pos.y / 5.12f) * 5.12f);
 
-        text.text = tiles[new Vector2Int(nearestX, nearestY)];
+        return tiles[new Vector2Int(nearestX, nearestY)];
     }
 
     private MapInfo ParseMap(string json)
