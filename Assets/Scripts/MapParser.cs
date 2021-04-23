@@ -37,7 +37,9 @@ public class MapParser : MonoBehaviour
             gameObject.transform.position = new Vector2(item.X, item.Y);
             // gameObject.transform.localScale = new Vector2(item.Width, item.Height);
             var sprite = Resources.Load<Sprite>($"Sprites/Game/{item.Id}");
-            gameObject.AddComponent<SpriteRenderer>().sprite = sprite;
+            var renderer = gameObject.AddComponent<SpriteRenderer>();
+            renderer.sprite = sprite;
+            renderer.size = new Vector2(item.Width, item.Height);
             tiles.Add(Vector2Int.RoundToInt(gameObject.transform.position), sprite.name);
         }
     }
