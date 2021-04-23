@@ -24,12 +24,12 @@ public class MapParser : MonoBehaviour
         text.text = tiles[new Vector2Int(nearestX, nearestY)];
     }
 
-    public Map ParseMap(string json)
+    private MapInfo ParseMap(string json)
     {
-        return JsonUtility.FromJson<Map>(json);
+        return JsonUtility.FromJson<MapInfo>(json);
     }
 
-    private void GenerateMap(Map map)
+    private void GenerateMap(MapInfo map)
     {
         foreach (var item in map.List)
         {

@@ -1,7 +1,7 @@
 using System;
 
 [Serializable]
-public struct Map
+public struct MapInfo
 {
     public Chunk[] List;
 

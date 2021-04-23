@@ -2,6 +2,13 @@ using UnityEngine;
 
 public class Zoomer : MonoBehaviour
 {
+    private new Camera camera;
+
+    private void Awake()
+    {
+        camera = GetComponent<Camera>();
+    }
+
     [SerializeField] private float zoomSpeed;
     [SerializeField] private float maxZoom;
     [SerializeField] private float minZoom;
@@ -10,8 +17,8 @@ public class Zoomer : MonoBehaviour
     {
         if (Input.mouseScrollDelta != Vector2.zero)
         {
-            var size = Mathf.Clamp(Camera.main.orthographicSize + Input.mouseScrollDelta.y * -zoomSpeed * Time.deltaTime, minZoom, maxZoom);
-            Camera.main.orthographicSize = size;
+            var size = Mathf.Clamp(camera.orthographicSize + Input.mouseScrollDelta.y * -zoomSpeed * Time.deltaTime, minZoom, maxZoom);
+            camera.orthographicSize = size;
         }
     }
 }
