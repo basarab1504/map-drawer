@@ -9,7 +9,6 @@ public class Map : MonoBehaviour
     private IParser parser;
     private ITileFactory factory;
 
-    public IReadOnlyList<TileData> Tiles => tiles;
     public Vector2 LeftBottom => leftBottom;
     public Vector2 RightTop => rightTop;
 
@@ -20,7 +19,11 @@ public class Map : MonoBehaviour
         GenerateMap();
     }
 
-
+    public TileData GetTileData(Vector2Int pos)
+    {
+        var index = tiles.BinarySearch(new TileData() {Position = pos}, new TileComparer());
+        return tiles[index];
+    }
 
     private void GenerateMap()
     {
@@ -48,6 +51,8 @@ public class Map : MonoBehaviour
 
             tiles.Add(item);
         }
+
+        tiles.Sort(new TileComparer());
 
         Vector2 halfSize = new Vector2(firstItem.Size.x / 2, firstItem.Size.y / 2);
 
