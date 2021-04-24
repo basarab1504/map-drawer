@@ -19,6 +19,7 @@ public class CameraMovement : MonoBehaviour
     private void Awake()
     {
         camera = GetComponent<Camera>();
+        AdjustCamera();
     }
 
     private void Start()
@@ -33,6 +34,16 @@ public class CameraMovement : MonoBehaviour
         UpdateDrag();
     }
 
+    private void AdjustCamera()
+    {
+        Camera.main.transform.position = new Vector3(
+            (Mathf.Abs(parser.max.x) - Mathf.Abs(parser.min.x)) / 2,
+            (Mathf.Abs(parser.max.y) - Mathf.Abs(parser.min.y)) / 2,
+            Camera.main.transform.position.z);
+        var diff = Mathf.Abs(parser.max.y - parser.min.y);
+        Camera.main.orthographicSize = diff / 2;
+    }
+
     private void UpdateZoom()
     {
         if (Input.mouseScrollDelta != Vector2.zero)
@@ -40,11 +51,9 @@ public class CameraMovement : MonoBehaviour
             var delta = Input.mouseScrollDelta.y * -zoomSpeed * Time.deltaTime;
             var size = Mathf.Clamp(camera.orthographicSize + delta, minZoom, maxZoom);
             var diff = size - camera.orthographicSize;
-            Debug.Log($"{boundsMin} {boundsMax}");
             camera.orthographicSize = size;
             boundsMin += new Vector2(diff, diff);
             boundsMax -= new Vector2(diff, diff);
-            Debug.Log($"{boundsMin} {boundsMax}");
         }
     }
 
@@ -63,12 +72,5 @@ public class CameraMovement : MonoBehaviour
         Vector3 targetPosition = new Vector3(viewportPoint.x * dragSpeed, viewportPoint.y * dragSpeed, 0);
         transform.position += targetPosition * Time.deltaTime;
         transform.position = new Vector3(Mathf.Clamp(transform.position.x, boundsMin.x, boundsMax.x), Mathf.Clamp(transform.position.y, boundsMin.y, boundsMax.y), transform.position.z);
-    }
-
-    void OnDrawGizmos()
-    {
-        // Draw a yellow sphere at the transform's position
-        Gizmos.color = Color.red;
-        Gizmos.DrawCube(center, boundsMax - boundsMin);
     }
 }

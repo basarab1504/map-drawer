@@ -12,7 +12,6 @@ public class MapParser : MonoBehaviour
     private void Awake()
     {
         GenerateMap(ParseMap(mapConfig.text));
-        AdjustCamera();
     }
 
     public string FindTileName()
@@ -23,16 +22,6 @@ public class MapParser : MonoBehaviour
         int nearestY = Mathf.RoundToInt(Mathf.RoundToInt(pos.y / 5.12f) * 5.12f);
 
         return tiles[new Vector2Int(nearestX, nearestY)];
-    }
-
-    private void AdjustCamera()
-    {
-        Camera.main.transform.position = new Vector3(
-            (Mathf.Abs(max.x) - Mathf.Abs(min.x)) / 2,
-            (Mathf.Abs(max.y) - Mathf.Abs(min.y)) / 2,
-            Camera.main.transform.position.z);
-        var diff = Mathf.Abs(max.y - min.y);
-        Camera.main.orthographicSize = diff / 2;
     }
 
     private MapInfo ParseMap(string json)
