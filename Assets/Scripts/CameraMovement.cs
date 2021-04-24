@@ -6,15 +6,13 @@ public class CameraMovement : MonoBehaviour
     [SerializeField] private float zoomSpeed;
     [SerializeField] private float maxZoom;
     [SerializeField] private float minZoom;
-    [SerializeField] MapParser parser;
+    [SerializeField] Map map;
 
     private new Camera camera;
     private Vector3 pressedDownPoint;
 
-    Vector2 boundsMin;
-    Vector2 boundsMax;
-
-    Vector2 center = new Vector2(17.92f, -5.12f);
+    Vector2 LeftBottomBound;
+    Vector2 rightTopBound;
 
     private void Awake()
     {
@@ -24,8 +22,8 @@ public class CameraMovement : MonoBehaviour
 
     private void Start()
     {
-        boundsMin = parser.min + new Vector2(camera.aspect * camera.orthographicSize, camera.orthographicSize);
-        boundsMax = parser.max - new Vector2(camera.aspect * camera.orthographicSize, camera.orthographicSize);
+        LeftBottomBound = map.LeftBottom + new Vector2(camera.aspect * camera.orthographicSize, camera.orthographicSize);
+        rightTopBound = map.RightTop - new Vector2(camera.aspect * camera.orthographicSize, camera.orthographicSize);
     }
 
     private void Update()
@@ -37,10 +35,10 @@ public class CameraMovement : MonoBehaviour
     private void AdjustCamera()
     {
         Camera.main.transform.position = new Vector3(
-            (Mathf.Abs(parser.max.x) - Mathf.Abs(parser.min.x)) / 2,
-            (Mathf.Abs(parser.max.y) - Mathf.Abs(parser.min.y)) / 2,
+            (Mathf.Abs(map.RightTop.x) - Mathf.Abs(map.LeftBottom.x)) / 2,
+            (Mathf.Abs(map.RightTop.y) - Mathf.Abs(map.LeftBottom.y)) / 2,
             Camera.main.transform.position.z);
-        var diff = Mathf.Abs(parser.max.y - parser.min.y);
+        var diff = Mathf.Abs(map.RightTop.y - map.LeftBottom.y);
         Camera.main.orthographicSize = Mathf.Clamp(diff / 2, minZoom, maxZoom);
     }
 
@@ -52,8 +50,8 @@ public class CameraMovement : MonoBehaviour
             var size = Mathf.Clamp(camera.orthographicSize + delta, minZoom, maxZoom);
             var diff = size - camera.orthographicSize;
             camera.orthographicSize = size;
-            boundsMin += new Vector2(diff, diff);
-            boundsMax -= new Vector2(diff, diff);
+            LeftBottomBound += new Vector2(diff, diff);
+            rightTopBound -= new Vector2(diff, diff);
         }
     }
 
@@ -71,6 +69,6 @@ public class CameraMovement : MonoBehaviour
         Vector3 viewportPoint = camera.ScreenToViewportPoint(Input.mousePosition - pressedDownPoint);
         Vector3 targetPosition = new Vector3(viewportPoint.x * dragSpeed, viewportPoint.y * dragSpeed, 0);
         transform.position += targetPosition * Time.deltaTime;
-        transform.position = new Vector3(Mathf.Clamp(transform.position.x, boundsMin.x, boundsMax.x), Mathf.Clamp(transform.position.y, boundsMin.y, boundsMax.y), transform.position.z);
+        transform.position = new Vector3(Mathf.Clamp(transform.position.x, LeftBottomBound.x, rightTopBound.x), Mathf.Clamp(transform.position.y, LeftBottomBound.y, rightTopBound.y), transform.position.z);
     }
 }
