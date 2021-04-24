@@ -11,20 +11,18 @@ public class CameraMovement : MonoBehaviour
     private new Camera camera;
     private Vector3 pressedDownPoint;
 
-    Vector2 LeftBottomBound;
+    Vector2 leftBottomBound;
     Vector2 rightTopBound;
+
+    private void Start()
+    {
+        AdjustBounds();
+    }
 
     private void Awake()
     {
         camera = GetComponent<Camera>();
         AdjustCamera();
-    }
-
-    private void Start()
-    {
-        Vector2 halfCameraSize = new Vector2(camera.aspect * camera.orthographicSize, camera.orthographicSize);
-        LeftBottomBound = map.LeftBottom + halfCameraSize;
-        rightTopBound = map.RightTop - halfCameraSize;
     }
 
     private void Update()
@@ -49,11 +47,17 @@ public class CameraMovement : MonoBehaviour
         {
             var delta = Input.mouseScrollDelta.y * -zoomSpeed * Time.deltaTime;
             var size = Mathf.Clamp(camera.orthographicSize + delta, minZoom, maxZoom);
-            var diff = size - camera.orthographicSize;
             camera.orthographicSize = size;
-            LeftBottomBound += new Vector2(diff, diff);
-            rightTopBound -= new Vector2(diff, diff);
+
+            AdjustBounds();
         }
+    }
+
+    private void AdjustBounds()
+    {
+        Vector2 halfCameraSize = new Vector2(camera.aspect * camera.orthographicSize, camera.orthographicSize);
+        leftBottomBound = map.LeftBottom + halfCameraSize;
+        rightTopBound = map.RightTop - halfCameraSize;
     }
 
     private void UpdateDrag()
@@ -70,6 +74,6 @@ public class CameraMovement : MonoBehaviour
         Vector3 viewportPoint = camera.ScreenToViewportPoint(Input.mousePosition - pressedDownPoint);
         Vector3 targetPosition = new Vector3(viewportPoint.x * dragSpeed, viewportPoint.y * dragSpeed, 0);
         transform.position += targetPosition * Time.deltaTime;
-        transform.position = new Vector3(Mathf.Clamp(transform.position.x, LeftBottomBound.x, rightTopBound.x), Mathf.Clamp(transform.position.y, LeftBottomBound.y, rightTopBound.y), transform.position.z);
+        transform.position = new Vector3(Mathf.Clamp(transform.position.x, leftBottomBound.x, rightTopBound.x), Mathf.Clamp(transform.position.y, leftBottomBound.y, rightTopBound.y), transform.position.z);
     }
 }
