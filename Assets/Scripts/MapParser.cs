@@ -38,12 +38,14 @@ public class MapParser : MonoBehaviour
         {
             if (min.x > item.X)
                 min.x = item.X;
+            else if (max.x < item.X)
+                max.x = item.X;
+
             if (min.y > item.Y)
                 min.y = item.Y;
-            if (max.x < item.X)
-                max.x = item.X;
-            if (max.y < item.Y)
+            else if (max.y < item.Y)
                 max.y = item.Y;
+                
             GameObject gameObject = new GameObject();
             gameObject.transform.position = new Vector2(item.X, item.Y);
             // gameObject.transform.localScale = new Vector2(item.Width, item.Height);

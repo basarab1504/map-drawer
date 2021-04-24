@@ -41,7 +41,7 @@ public class CameraMovement : MonoBehaviour
             (Mathf.Abs(parser.max.y) - Mathf.Abs(parser.min.y)) / 2,
             Camera.main.transform.position.z);
         var diff = Mathf.Abs(parser.max.y - parser.min.y);
-        Camera.main.orthographicSize = diff / 2;
+        Camera.main.orthographicSize = Mathf.Clamp(diff / 2, minZoom, maxZoom);
     }
 
     private void UpdateZoom()
