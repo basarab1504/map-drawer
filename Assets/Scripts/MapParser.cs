@@ -12,6 +12,7 @@ public class MapParser : MonoBehaviour
     private void Awake()
     {
         GenerateMap(ParseMap(mapConfig.text));
+        AdjustCamera();
     }
 
     public string FindTileName()
@@ -24,6 +25,16 @@ public class MapParser : MonoBehaviour
         return tiles[new Vector2Int(nearestX, nearestY)];
     }
 
+    private void AdjustCamera()
+    {
+        Camera.main.transform.position = new Vector3(
+            (Mathf.Abs(max.x) - Mathf.Abs(min.x)) / 2,
+            (Mathf.Abs(max.y) - Mathf.Abs(min.y)) / 2,
+            Camera.main.transform.position.z);
+        var diff = Mathf.Abs(max.y - min.y);
+        Camera.main.orthographicSize = diff / 2;
+    }
+
     private MapInfo ParseMap(string json)
     {
         return JsonUtility.FromJson<MapInfo>(json);
@@ -33,8 +44,6 @@ public class MapParser : MonoBehaviour
     {
         min = new Vector2(map.List[0].X, map.List[0].Y);
         max = new Vector2(map.List[0].X, map.List[0].Y);
-
-        var par = new GameObject();
 
         foreach (var item in map.List)
         {
@@ -58,9 +67,5 @@ public class MapParser : MonoBehaviour
 
         min -= new Vector2(map.List[0].Width / 2, map.List[0].Height / 2);
         max += new Vector2(map.List[0].Width / 2, map.List[0].Height / 2);
-
-        par.transform.localScale = max - min;
-
-        par.AddComponent<BoxCollider2D>();
     }
 }

@@ -11,11 +11,20 @@ public class CameraMovement : MonoBehaviour
     private new Camera camera;
     private Vector3 pressedDownPoint;
 
-    private void Start()
+    Vector2 boundsMin;
+    Vector2 boundsMax;
+
+    Vector2 center = new Vector2(17.92f, -5.12f);
+
+    private void Awake()
     {
         camera = GetComponent<Camera>();
-        parser.min += new Vector2(camera.aspect * camera.orthographicSize, camera.orthographicSize);
-        parser.max -= new Vector2(camera.aspect * camera.orthographicSize, camera.orthographicSize);
+    }
+
+    private void Start()
+    {
+        boundsMin = parser.min + new Vector2(camera.aspect * camera.orthographicSize, camera.orthographicSize);
+        boundsMax = parser.max - new Vector2(camera.aspect * camera.orthographicSize, camera.orthographicSize);
     }
 
     private void Update()
@@ -31,9 +40,11 @@ public class CameraMovement : MonoBehaviour
             var delta = Input.mouseScrollDelta.y * -zoomSpeed * Time.deltaTime;
             var size = Mathf.Clamp(camera.orthographicSize + delta, minZoom, maxZoom);
             var diff = size - camera.orthographicSize;
+            Debug.Log($"{boundsMin} {boundsMax}");
             camera.orthographicSize = size;
-            parser.min += new Vector2(diff, diff);
-            parser.max -= new Vector2(diff, diff);
+            boundsMin += new Vector2(diff, diff);
+            boundsMax -= new Vector2(diff, diff);
+            Debug.Log($"{boundsMin} {boundsMax}");
         }
     }
 
@@ -51,6 +62,13 @@ public class CameraMovement : MonoBehaviour
         Vector3 viewportPoint = camera.ScreenToViewportPoint(Input.mousePosition - pressedDownPoint);
         Vector3 targetPosition = new Vector3(viewportPoint.x * dragSpeed, viewportPoint.y * dragSpeed, 0);
         transform.position += targetPosition * Time.deltaTime;
-        transform.position = new Vector3(Mathf.Clamp(transform.position.x, parser.min.x, parser.max.x), Mathf.Clamp(transform.position.y, parser.min.y, parser.max.y), transform.position.z);
+        transform.position = new Vector3(Mathf.Clamp(transform.position.x, boundsMin.x, boundsMax.x), Mathf.Clamp(transform.position.y, boundsMin.y, boundsMax.y), transform.position.z);
+    }
+
+    void OnDrawGizmos()
+    {
+        // Draw a yellow sphere at the transform's position
+        Gizmos.color = Color.red;
+        Gizmos.DrawCube(center, boundsMax - boundsMin);
     }
 }
