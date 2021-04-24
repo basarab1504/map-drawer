@@ -4,12 +4,12 @@ class GameMenuController : MonoBehaviour
 {
     private GameMenuView view;
 
-    [SerializeField] private Map map;
+    [SerializeField] private TileFinder finder;
 
     private void Awake()
     {
         view = GetComponent<GameMenuView>();
-        view.ViewOpened.AddListener(() => OnMapTileChange(map.FindTileName()));
+        view.ViewOpened.AddListener(() => OnMapTileChange(finder.FindTileName()));
     }
 
     public void OnMapTileChange(string value)

@@ -22,8 +22,9 @@ public class CameraMovement : MonoBehaviour
 
     private void Start()
     {
-        LeftBottomBound = map.LeftBottom + new Vector2(camera.aspect * camera.orthographicSize, camera.orthographicSize);
-        rightTopBound = map.RightTop - new Vector2(camera.aspect * camera.orthographicSize, camera.orthographicSize);
+        Vector2 halfCameraSize = new Vector2(camera.aspect * camera.orthographicSize, camera.orthographicSize);
+        LeftBottomBound = map.LeftBottom + halfCameraSize;
+        rightTopBound = map.RightTop - halfCameraSize;
     }
 
     private void Update()

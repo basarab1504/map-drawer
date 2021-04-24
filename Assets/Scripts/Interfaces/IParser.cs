@@ -1,4 +1,4 @@
 public interface IParser
 {
-    MapInfo Parse();
+    TileData[] Parse();
 }
