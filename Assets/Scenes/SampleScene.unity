@@ -242,8 +242,8 @@ GameObject:
   - component: {fileID: 506996578}
   - component: {fileID: 506996577}
   - component: {fileID: 506996576}
-  - component: {fileID: 506996575}
   - component: {fileID: 506996579}
+  - component: {fileID: 506996575}
   m_Layer: 0
   m_Name: Map
   m_TagString: Untagged
@@ -260,7 +260,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 506996574}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79bdc05becefe994a93f08343ace1f70, type: 3}
+  m_Script: {fileID: 11500000, guid: c0728de64e9f8b14b91aa599d267e224, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &506996576
