@@ -29,16 +29,21 @@ public class Map : MonoBehaviour
     {
         var data = parser.Parse();
 
+        var firstItem = data[0];
+
         foreach (var item in data)
         {
             var child = factory.Instantiate(item);
             child.transform.SetParent(transform);
+
             tiles.Add(item);
         }
 
         tiles.Sort(new TileComparer());
 
-        leftBottom = tiles[0].Position - tiles[0].Size / 2;
-        rightTop = tiles[tiles.Count - 1].Position + tiles[tiles.Count - 1].Size / 2;
+        Vector2 halfSize = new Vector2(firstItem.Size.x / 2, firstItem.Size.y / 2);
+
+        leftBottom = tiles[0].Position - halfSize;
+        rightTop = tiles[tiles.Count - 1].Position + halfSize;
     }
 }
