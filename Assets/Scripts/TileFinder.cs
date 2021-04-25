@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class TileFinder : MonoBehaviour
 {
+    [SerializeField] private Vector2 expectedTileSize;
     private Map map;
 
     private void Awake()
@@ -13,8 +14,8 @@ public class TileFinder : MonoBehaviour
     {
         var pos = Camera.main.ViewportToWorldPoint(new Vector3(0, 1, 0));
 
-        int nearestX = Mathf.RoundToInt(Mathf.RoundToInt(pos.x / 5.12f) * 5.12f);
-        int nearestY = Mathf.RoundToInt(Mathf.RoundToInt(pos.y / 5.12f) * 5.12f);
+        int nearestX = Mathf.RoundToInt(Mathf.RoundToInt(pos.x / expectedTileSize.x) * expectedTileSize.x);
+        int nearestY = Mathf.RoundToInt(Mathf.RoundToInt(pos.y / expectedTileSize.y) * expectedTileSize.y);
 
         return map.GetTileData(new Vector2Int(nearestX, nearestY)).Title;
     }
