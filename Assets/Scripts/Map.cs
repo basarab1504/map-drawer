@@ -21,7 +21,7 @@ public class Map : MonoBehaviour
 
     public TileData GetTileData(Vector2Int pos)
     {
-        var index = tiles.BinarySearch(new TileData() {Position = pos}, new TileComparer());
+        var index = tiles.BinarySearch(new TileData() { Position = pos }, new TileComparer());
         return tiles[index];
     }
 
@@ -31,21 +31,8 @@ public class Map : MonoBehaviour
 
         var firstItem = data[0];
 
-        leftBottom = firstItem.Position;
-        rightTop = firstItem.Position;
-
         foreach (var item in data)
         {
-            if (leftBottom.x > item.Position.x)
-                leftBottom.x = item.Position.x;
-            else if (rightTop.x < item.Position.x)
-                rightTop.x = item.Position.x;
-
-            if (leftBottom.y > item.Position.y)
-                leftBottom.y = item.Position.y;
-            else if (rightTop.y < item.Position.y)
-                rightTop.y = item.Position.y;
-
             var child = factory.Instantiate(item);
             child.transform.SetParent(transform);
 
@@ -56,7 +43,7 @@ public class Map : MonoBehaviour
 
         Vector2 halfSize = new Vector2(firstItem.Size.x / 2, firstItem.Size.y / 2);
 
-        leftBottom -= halfSize;
-        rightTop += halfSize;
+        leftBottom = tiles[0].Position - halfSize;
+        rightTop = tiles[tiles.Count - 1].Position + halfSize;
     }
 }
