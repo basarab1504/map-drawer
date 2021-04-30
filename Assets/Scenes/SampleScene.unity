@@ -336,6 +336,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 563269cac3699bf4fa917b443bc696de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  expectedTileSize: {x: 5.12, y: 5.12}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
